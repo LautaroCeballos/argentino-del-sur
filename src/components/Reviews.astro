@@ -1,0 +1,340 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const reviews = [
+  {
+    text: lang === 'pt'
+      ? 'A localização é simplesmente imbatível. Saímos pela porta e já estávamos no centro, perto do lago e da Catedral. Perfeito para explorar Bariloche a pé.'
+      : 'La ubicación es simplemente inmejorable. Salimos por la puerta y ya estábamos en el centro, cerca del lago y la Catedral. Perfecto para recorrer Bariloche a pie.',
+    author: lang === 'pt' ? 'Família de São Paulo' : 'Familia de Buenos Aires',
+    rating: 5,
+    tag: lang === 'pt' ? 'Localização' : 'Ubicación',
+  },
+  {
+    text: lang === 'pt'
+      ? 'O atendimento foi muito cordial desde o primeiro momento. Sentiram-se bem-recebidos e nos ajudaram com todas as dúvidas sobre passeios e transporte.'
+      : 'La atención fue muy cordial desde el primer momento. Nos sentimos bien recibidos y nos ayudaron con todas las dudas sobre excursiones y transporte.',
+    author: lang === 'pt' ? 'Casal do Rio de Janeiro' : 'Pareja de Córdoba',
+    rating: 4,
+    tag: lang === 'pt' ? 'Atendimento' : 'Atención',
+  },
+  {
+    text: lang === 'pt'
+      ? 'Ótimo custo-benefício para Bariloche. As instalações são simples e limpas. Para quem vai conhecer a cidade e a Patagônia, é tudo o que precisa.'
+      : 'Excelente relación precio-calidad para Bariloche. Las instalaciones son simples y limpias. Para quien viene a conocer la ciudad y la Patagonia, tiene todo lo que necesita.',
+    author: lang === 'pt' ? 'Viajante solo' : 'Viajero solo',
+    rating: 4,
+    tag: lang === 'pt' ? 'Custo-benefício' : 'Precio',
+  },
+  {
+    text: lang === 'pt'
+      ? 'Tomamos café da manhã todos os dias no hotel e era muito bom. Bem localizado, perto de tudo. Voltaríamos sem dúvida.'
+      : 'Desayunamos todos los días en el hotel y estuvo muy rico. Bien ubicado, cerca de todo. Volveríamos sin dudas.',
+    author: lang === 'pt' ? 'Família Gonçalves' : 'Familia Rodríguez',
+    rating: 5,
+    tag: lang === 'pt' ? 'Café da manhã' : 'Desayuno',
+  },
+  {
+    text: lang === 'pt'
+      ? 'As vistas para o lago são lindas. O hotel é simples, mas o que importa é que a localização é incrível e o preço é justo para Bariloche.'
+      : 'Las vistas al lago son hermosas. El hotel es sencillo, pero lo que importa es que la ubicación es increíble y el precio es justo para Bariloche.',
+    author: lang === 'pt' ? 'Pedro e Mariana' : 'Carlos y Mariana',
+    rating: 4,
+    tag: lang === 'pt' ? 'Vistas' : 'Vistas',
+  },
+  {
+    text: lang === 'pt'
+      ? 'Hotel tranquilo e bem mantido, a poucos passos de tudo que Bariloche tem de melhor. Ideal para quem quer economizar sem abrir mão da localização.'
+      : 'Hotel tranquilo y bien mantenido, a pocos pasos de todo lo mejor de Bariloche. Ideal para quienes quieren ahorrar sin sacrificar la ubicación.',
+    author: lang === 'pt' ? 'Turistas de Curitiba' : 'Turistas de Mendoza',
+    rating: 4,
+    tag: lang === 'pt' ? 'Tranquilidade' : 'Tranquilidad',
+  },
+];
+
+const loved = [
+  { key: 'location', icon: '📍' },
+  { key: 'service',  icon: '🤝' },
+  { key: 'price',    icon: '💰' },
+  { key: 'view',     icon: '🏔️' },
+  { key: 'breakfast',icon: '☕' },
+];
+
+function renderStars(n: number) {
+  return Array.from({ length: 5 }, (_, i) => i < n ? '★' : '☆').join('');
+}
+---
+
+<section class="section reviews" id="resenas" aria-labelledby="reviews-title">
+  <div class="container">
+    <!-- Header -->
+    <div class="section-header centered">
+      <span class="section-badge reveal">{t('reviews.badge')}</span>
+      <h2 class="section-title reveal reveal-delay-1" id="reviews-title">
+        {t('reviews.title')} <span class="highlight">{t('reviews.highlight')}</span>
+      </h2>
+      <p class="section-subtitle reveal reveal-delay-2">{t('reviews.subtitle')}</p>
+    </div>
+
+    <!-- Rating summary -->
+    <div class="reviews__summary reveal reveal-delay-2">
+      <div class="reviews__score">
+        <span class="reviews__score-number">3.5</span>
+        <div class="reviews__score-stars">
+          <div class="stars" aria-label="Calificación 3.5 de 5">★★★½☆</div>
+          <span class="reviews__score-count">70 {lang === 'pt' ? 'avaliações' : 'opiniones'}</span>
+        </div>
+      </div>
+      <div class="reviews__loved">
+        <p class="reviews__loved-title">{t('reviews.loved.title')}</p>
+        <div class="reviews__loved-items">
+          {loved.map(item => (
+            <span class="reviews__loved-chip">
+              <span aria-hidden="true">{item.icon}</span>
+              {t(`reviews.loved.${item.key}` as any)}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviews grid -->
+    <div class="reviews__grid">
+      {reviews.map((review, i) => (
+        <article class={`review-card card reveal reveal-delay-${(i % 3) + 1}`}>
+          <!-- Quote icon -->
+          <div class="review-card__quote" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+            </svg>
+          </div>
+
+          <div class="review-card__tag">{review.tag}</div>
+
+          <div class="review-card__stars" aria-label={`${review.rating} de 5 estrellas`}>
+            {renderStars(review.rating)}
+          </div>
+
+          <blockquote class="review-card__text">"{review.text}"</blockquote>
+
+          <footer class="review-card__author">
+            <div class="review-card__avatar" aria-hidden="true">
+              {review.author.charAt(0)}
+            </div>
+            <span>{review.author}</span>
+          </footer>
+        </article>
+      ))}
+    </div>
+
+    <!-- Transparency block -->
+    <div class="reviews__transparency reveal">
+      <div class="reviews__transparency-icon" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <div>
+        <strong>{t('reviews.transparency.title')}</strong>
+        <p>{t('reviews.transparency.desc')}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .reviews {
+    background: linear-gradient(180deg, var(--color-snow) 0%, var(--color-white) 100%);
+  }
+
+  /* ── Summary ── */
+  .reviews__summary {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    background: var(--color-blue-deep);
+    border-radius: var(--radius-xl);
+    padding: 2rem 2.5rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .reviews__score {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex-shrink: 0;
+  }
+
+  .reviews__score-number {
+    font-family: var(--font-display);
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--color-gold-light);
+    line-height: 1;
+  }
+
+  .reviews__score-stars {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .reviews__score-stars .stars {
+    font-size: 1.25rem;
+    color: var(--color-gold-light);
+    letter-spacing: 2px;
+  }
+
+  .reviews__score-count {
+    font-size: var(--text-sm);
+    color: rgba(255,255,255,0.55);
+  }
+
+  .reviews__loved {
+    flex: 1;
+  }
+
+  .reviews__loved-title {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.875rem;
+  }
+
+  .reviews__loved-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .reviews__loved-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: var(--text-xs);
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.18);
+    padding: 0.375rem 0.875rem;
+    border-radius: var(--radius-full);
+  }
+
+  /* ── Grid ── */
+  .reviews__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  /* ── Card ── */
+  .review-card {
+    padding: 1.75rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+
+  .review-card__quote {
+    color: rgba(201,150,58,0.2);
+    line-height: 1;
+  }
+
+  .review-card__tag {
+    display: inline-block;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+  }
+
+  .review-card__stars {
+    font-size: 1rem;
+    color: var(--color-gold);
+    letter-spacing: 1px;
+  }
+
+  .review-card__text {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.75;
+    font-style: italic;
+    flex: 1;
+  }
+
+  .review-card__author {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text-primary);
+  }
+
+  .review-card__avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-blue-mid), var(--color-blue-lake));
+    color: white;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* Transparency note */
+  .reviews__transparency {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background: rgba(37,99,168,0.06);
+    border: 1px solid rgba(37,99,168,0.15);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem;
+    color: var(--color-blue-mid);
+  }
+
+  .reviews__transparency-icon {
+    flex-shrink: 0;
+    opacity: 0.7;
+    margin-top: 0.125rem;
+  }
+
+  .reviews__transparency strong {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: var(--color-blue-mid);
+  }
+
+  .reviews__transparency p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 900px) {
+    .reviews__grid { grid-template-columns: repeat(2, 1fr); }
+    .reviews__summary { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+  }
+  @media (max-width: 580px) {
+    .reviews__grid { grid-template-columns: 1fr; }
+  }
+</style>

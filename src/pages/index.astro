@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Rooms from '../components/Rooms.astro';
+import Reviews from '../components/Reviews.astro';
+import Activities from '../components/Activities.astro';
+import Location from '../components/Location.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+import { useTranslations, getLangFromUrl } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<Layout title={t('site.title')} description={t('site.description')}>
+  <Header />
+  <main>
+    <Hero />
+    <About />
+    <Rooms />
+    <Reviews />
+    <Activities />
+    <Location />
+    <Contact />
+  </main>
+  <Footer />
+</Layout>

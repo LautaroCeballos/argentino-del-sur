@@ -1,0 +1,270 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const features = [
+  {
+    key: 'feature1',
+    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+      <circle cx="12" cy="10" r="3"/>
+    </svg>`,
+  },
+  {
+    key: 'feature2',
+    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+      <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+    </svg>`,
+  },
+  {
+    key: 'feature3',
+    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+      <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+    </svg>`,
+  },
+  {
+    key: 'feature4',
+    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+      <path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/>
+      <line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>
+    </svg>`,
+  },
+];
+---
+
+<section class="section about" id="sobre" aria-labelledby="about-title">
+  <div class="container">
+    <div class="about__grid">
+
+      <!-- Left: image column -->
+      <div class="about__visual reveal">
+        <div class="about__img-main img-wrapper">
+          <img
+            src="https://images.unsplash.com/photo-1598928506311-c55ded91a20c?w=800&q=85&auto=format"
+            alt="Vista del hotel desde el frente, con el lago al fondo"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div class="about__img-accent img-wrapper reveal reveal-delay-2">
+          <img
+            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&q=85&auto=format"
+            alt="Lago Nahuel Huapi con montañas nevadas"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+
+        <!-- Floating stat card -->
+        <div class="about__stat glass-dark">
+          <span class="about__stat-number">20</span>
+          <span class="about__stat-label">{lang === 'pt' ? 'quartos' : 'habitaciones'}</span>
+          <div class="about__stat-divider"></div>
+          <span class="about__stat-sub">{lang === 'pt' ? 'no centro de Bariloche' : 'en el centro de Bariloche'}</span>
+        </div>
+      </div>
+
+      <!-- Right: text column -->
+      <div class="about__content">
+        <span class="section-badge reveal">{t('about.badge')}</span>
+
+        <h2 class="section-title reveal reveal-delay-1" id="about-title">
+          {t('about.title')} <br />
+          <span class="highlight">{t('about.highlight')}</span>
+        </h2>
+
+        <div class="divider reveal reveal-delay-2"></div>
+
+        <div class="about__paragraphs reveal reveal-delay-2">
+          <p>{t('about.p1')}</p>
+          <p>{t('about.p2')}</p>
+          <p>{t('about.p3')}</p>
+        </div>
+
+        <!-- Feature pills -->
+        <div class="about__features reveal reveal-delay-3">
+          {features.map(f => (
+            <div class="about__feature">
+              <div class="about__feature-icon" set:html={f.icon} />
+              <div>
+                <strong>{t(`about.${f.key}.title` as any)}</strong>
+                <span>{t(`about.${f.key}.desc` as any)}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(3rem, 6vw, 5rem);
+    align-items: center;
+  }
+
+  /* ── Visual column ── */
+  .about__visual {
+    position: relative;
+  }
+
+  .about__img-main {
+    border-radius: var(--radius-xl);
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+  }
+  .about__img-main img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .about__img-accent {
+    position: absolute;
+    bottom: -2.5rem;
+    right: -2rem;
+    width: 55%;
+    border-radius: var(--radius-lg);
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    border: 3px solid var(--color-white);
+  }
+  .about__img-accent img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Floating stat */
+  .about__stat {
+    position: absolute;
+    top: 2rem;
+    left: -1.5rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    text-align: center;
+    color: white;
+    min-width: 9rem;
+  }
+
+  .about__stat-number {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-gold-light);
+  }
+
+  .about__stat-label {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .about__stat-divider {
+    width: 2rem;
+    height: 1px;
+    background: rgba(255,255,255,0.25);
+    margin: 0.5rem auto;
+  }
+
+  .about__stat-sub {
+    font-size: var(--text-xs);
+    color: rgba(255,255,255,0.60);
+    line-height: 1.4;
+  }
+
+  /* ── Content column ── */
+  .about__paragraphs {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    color: var(--color-text-secondary);
+    line-height: 1.75;
+    margin-bottom: 2rem;
+    font-size: var(--text-base);
+  }
+
+  .about__features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .about__feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    padding: 1rem;
+    background: var(--color-stone-100);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  }
+  .about__feature:hover {
+    border-color: rgba(201,150,58,0.3);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .about__feature-icon {
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(201,150,58,0.12);
+    border-radius: var(--radius-sm);
+    color: var(--color-gold);
+  }
+
+  .about__feature div:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .about__feature strong {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-blue-deep);
+  }
+  .about__feature span {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    line-height: 1.4;
+  }
+
+  @media (max-width: 900px) {
+    .about__grid {
+      grid-template-columns: 1fr;
+    }
+    .about__visual {
+      max-width: 480px;
+      margin-inline: auto;
+      margin-bottom: 3rem;
+    }
+    .about__stat {
+      left: 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .about__features {
+      grid-template-columns: 1fr;
+    }
+    .about__img-accent {
+      right: 0;
+      bottom: -2rem;
+    }
+  }
+</style>
